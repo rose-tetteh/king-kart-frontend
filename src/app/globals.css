@@ -10,6 +10,11 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* King Kart Brand Colors */
+  --color-gold: #D4A017;
+  --color-navy: #1B2845;
+  --color-olive: #6B6B2C;
 }
 
 @media (prefers-color-scheme: dark) {
