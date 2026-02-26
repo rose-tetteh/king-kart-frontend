@@ -43,12 +43,27 @@ export interface CheckoutFormData {
   mobileMoneyPhone?: string;
 }
 
+export type OrderStatus =
+  | 'RECEIVED'
+  | 'IN_PROGRESS'
+  | 'READY_FOR_DELIVERY'
+  | 'COMPLETED'
+  | 'CANCELLED';
+
+export const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
+  RECEIVED: 'Received',
+  IN_PROGRESS: 'In Progress',
+  READY_FOR_DELIVERY: 'Ready for Delivery',
+  COMPLETED: 'Completed',
+  CANCELLED: 'Cancelled',
+};
+
 export interface Order {
   orderNumber: string;
   items: CartItem[];
   customerInfo: CheckoutFormData;
   total: number;
-  status: 'PENDING' | 'CONFIRMED' | 'IN_PRODUCTION' | 'READY' | 'DELIVERED' | 'CANCELLED';
+  status: OrderStatus;
   isPaid: boolean;
   createdAt: string;
   paymentMethod: 'MOBILE_MONEY' | 'CASH_ON_DELIVERY';

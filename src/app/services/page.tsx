@@ -11,17 +11,17 @@ export default function ServicesPage() {
 
   const categories = [
     { value: 'ALL', label: 'All Services' },
-    { value: 'SUIT', label: 'Suits' },
-    { value: 'AFRICAN_PRINT', label: 'African Prints' },
-    { value: 'NURSES_SCRUBS', label: "Nurses' Scrubs" },
-    { value: 'EMBROIDERY', label: 'Embroidery' },
-    { value: 'TSHIRT_CUSTOMIZATION', label: 'T-Shirts' },
+    { value: 'CUSTOM_SEWN', label: 'Custom Sewn', includes: ['SUIT', 'AFRICAN_PRINT', 'NURSES_SCRUBS'] },
+    { value: 'CUSTOMISATION', label: 'Customisation', includes: ['EMBROIDERY', 'TSHIRT_CUSTOMIZATION'] },
   ];
 
   const filteredServices =
     selectedCategory === 'ALL'
       ? mockServices
-      : mockServices.filter((service) => service.category === selectedCategory);
+      : mockServices.filter((service) => {
+          const category = categories.find(cat => cat.value === selectedCategory);
+          return category?.includes?.includes(service.category) || service.category === selectedCategory;
+        });
 
   return (
     <main className="min-h-screen bg-gray-50 py-12">

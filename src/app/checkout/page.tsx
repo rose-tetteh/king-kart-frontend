@@ -34,6 +34,8 @@ export default function CheckoutPage() {
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [isProcessing, setIsProcessing] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [filePreview, setFilePreview] = useState<string[]>([]);
 
   // Redirect if cart is empty
   if (cart.items.length === 0) {
@@ -65,6 +67,39 @@ export default function CheckoutPage() {
     return Object.keys(newErrors).length === 0;
   };
 
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files) return;
+
+    const fileArray = Array.from(files);
+    const validFiles = fileArray.filter(file => {
+      const isImage = file.type.startsWith('image/');
+      const isVideo = file.type.startsWith('video/');
+      return isImage || isVideo;
+    });
+
+    setUploadedFiles(prev => [...prev, ...validFiles]);
+
+    // Create preview URLs for images
+    validFiles.forEach(file => {
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setFilePreview(prev => [...prev, reader.result as string]);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        // For videos, add a placeholder
+        setFilePreview(prev => [...prev, 'video']);
+      }
+    });
+  };
+
+  const removeFile = (index: number) => {
+    setUploadedFiles(prev => prev.filter((_, i) => i !== index));
+    setFilePreview(prev => prev.filter((_, i) => i !== index));
+  };
+
   const handleNext = () => {
     if (step === 'info' && validateStep('info')) {
       setStep('review');
@@ -87,7 +122,7 @@ export default function CheckoutPage() {
       items: cart.items,
       customerInfo: formData,
       total: cart.total,
-      status: 'PENDING' as const,
+      status: 'RECEIVED' as const,
       isPaid: formData.paymentMethod === 'MOBILE_MONEY',
       createdAt: new Date().toISOString(),
       paymentMethod: formData.paymentMethod,
@@ -281,6 +316,89 @@ export default function CheckoutPage() {
                     />
                   </div>
 
+                  {/* File Upload Section */}
+                  <div className="mb-6">
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Upload Design References (Optional)
+                    </label>
+                    <p className="text-sm text-gray-500 mb-3">
+                      Upload pictures or videos showing what you want. You can upload multiple files.
+                    </p>
+
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-[var(--color-kk-gold)] transition-colors">
+                      <input
+                        type="file"
+                        id="fileUpload"
+                        multiple
+                        accept="image/*,video/*"
+                        onChange={handleFileUpload}
+                        className="hidden"
+                      />
+                      <label htmlFor="fileUpload" className="cursor-pointer">
+                        <svg className="w-12 h-12 mx-auto text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                        <p className="text-sm text-gray-600 font-semibold mb-1">
+                          Click to upload or drag and drop
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          Images and Videos (PNG, JPG, GIF, MP4, MOV)
+                        </p>
+                      </label>
+                    </div>
+
+                    {/* Preview Uploaded Files */}
+                    {uploadedFiles.length > 0 && (
+                      <div className="mt-4">
+                        <p className="text-sm font-semibold text-gray-700 mb-2">
+                          Uploaded Files ({uploadedFiles.length})
+                        </p>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                          {uploadedFiles.map((file, index) => (
+                            <div key={index} className="relative group">
+                              <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
+                                {file.type.startsWith('image/') ? (
+                                  filePreview[index] && filePreview[index] !== 'video' ? (
+                                    <img
+                                      src={filePreview[index]}
+                                      alt={`Upload ${index + 1}`}
+                                      className="w-full h-full object-cover"
+                                    />
+                                  ) : (
+                                    <div className="w-full h-full flex items-center justify-center">
+                                      <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                      </svg>
+                                    </div>
+                                  )
+                                ) : (
+                                  <div className="w-full h-full flex flex-col items-center justify-center">
+                                    <svg className="w-8 h-8 text-[var(--color-kk-gold)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                    </svg>
+                                    <span className="text-xs text-gray-600 mt-1">Video</span>
+                                  </div>
+                                )}
+                              </div>
+                              <button
+                                onClick={() => removeFile(index)}
+                                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition-colors opacity-0 group-hover:opacity-100"
+                                aria-label="Remove file"
+                              >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                              </button>
+                              <p className="text-xs text-gray-600 mt-1 truncate">
+                                {file.name}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
                   <div className="flex gap-4">
                     <Button variant="primary" className="flex-1" onClick={handleNext}>
                       Continue to Review
@@ -318,6 +436,41 @@ export default function CheckoutPage() {
                       {formData.postalCode && `, ${formData.postalCode}`}
                     </p>
                   </div>
+
+                  {/* Uploaded Files */}
+                  {uploadedFiles.length > 0 && (
+                    <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+                      <h3 className="font-bold text-[var(--color-kk-navy)] mb-3">Design References</h3>
+                      <div className="grid grid-cols-3 md:grid-cols-5 gap-2">
+                        {uploadedFiles.map((file, index) => (
+                          <div key={index} className="aspect-square rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
+                            {file.type.startsWith('image/') ? (
+                              filePreview[index] && filePreview[index] !== 'video' ? (
+                                <img
+                                  src={filePreview[index]}
+                                  alt={`Reference ${index + 1}`}
+                                  className="w-full h-full object-cover"
+                                />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center">
+                                  <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                  </svg>
+                                </div>
+                              )
+                            ) : (
+                              <div className="w-full h-full flex flex-col items-center justify-center">
+                                <svg className="w-6 h-6 text-[var(--color-kk-gold)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                </svg>
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                      <p className="text-xs text-gray-500 mt-2">{uploadedFiles.length} file(s) uploaded</p>
+                    </div>
+                  )}
 
                   {/* Order Items */}
                   <div className="mb-6">

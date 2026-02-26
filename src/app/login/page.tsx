@@ -8,6 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
+import { setCustomerUser } from '@/lib/customerAuth';
 
 // Login form validation schema
 const loginSchema = z.object({
@@ -35,16 +36,20 @@ export default function LoginPage() {
     setErrorMessage('');
 
     try {
-      // TODO: Implement actual API call to backend
-      console.log('Login data:', data);
+      // FRONTEND ONLY: Accepts any valid email/password format.
+      // TODO: Replace with POST /api/auth/login in backend integration story.
+      await new Promise((resolve) => setTimeout(resolve, 800));
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      setCustomerUser({
+        email: data.email,
+        firstName: 'Customer', // placeholder until backend returns real name
+        lastName: '',
+        phone: '',
+        role: 'CUSTOMER',
+      });
 
-      // For now, just redirect to home
-      // In production, this will call the backend API and store the JWT token
-      router.push('/');
-    } catch (error) {
+      router.push('/profile');
+    } catch {
       setErrorMessage('Invalid email or password. Please try again.');
     } finally {
       setIsLoading(false);
@@ -147,7 +152,7 @@ export default function LoginPage() {
                 <div className="w-full border-t border-gray-300"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-white text-gray-500">Don't have an account?</span>
+                <span className="px-4 bg-white text-gray-500">Don&apos;t have an account?</span>
               </div>
             </div>
 

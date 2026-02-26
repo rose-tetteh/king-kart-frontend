@@ -12,19 +12,6 @@ export const Hero: React.FC = () => {
 
       <Container>
         <div className="text-center max-w-4xl mx-auto">
-          {/* Logo */}
-          <div className="inline-block mb-8">
-            <div className="w-24 h-24 md:w-32 md:h-32 relative">
-              <Image
-                src="/logo.jpeg"
-                alt="King Kart Logo"
-                fill
-                className="object-contain"
-                priority
-              />
-            </div>
-          </div>
-
           <h1 className="text-4xl md:text-6xl font-bold mb-4">
             <span className="text-[var(--color-kk-gold)]">KING KART</span>
           </h1>
