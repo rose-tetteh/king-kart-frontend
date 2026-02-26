@@ -84,24 +84,62 @@ king-kart-frontend/
 ├── public/              # Static assets (images, icons)
 ├── src/
 │   ├── app/            # Next.js App Router
-│   │   ├── (auth)/     # Auth route group (login, register, verify-email)
-│   │   ├── (customer)/ # Customer route group (services, cart, orders)
-│   │   ├── admin/      # Admin route group (dashboard, orders)
+│   │   ├── admin/      # Admin routes (login, orders management)
+│   │   ├── cart/       # Shopping cart
+│   │   ├── checkout/   # Checkout flow
+│   │   ├── login/      # Customer login
+│   │   ├── register/   # Customer registration
+│   │   ├── orders/     # Customer order history
+│   │   ├── profile/    # Customer profile
+│   │   ├── services/   # Service catalog
+│   │   ├── measurements/ # Measurement management
 │   │   ├── layout.tsx  # Root layout
 │   │   └── page.tsx    # Landing page
 │   ├── components/     # React components
-│   │   └── ui/         # Reusable UI components
+│   │   ├── ui/         # Reusable UI components
+│   │   ├── home/       # Home page components
+│   │   ├── layout/     # Layout components (Header, Footer)
+│   │   ├── admin/      # Admin-specific components
+│   │   └── orders/     # Order-related components
 │   ├── hooks/          # Custom React hooks
-│   ├── services/       # API client layer
 │   ├── contexts/       # React Context providers
-│   └── lib/            # Utility functions
+│   └── lib/            # Utility functions and auth helpers
 ├── .env.example        # Environment variables template
 ├── .gitignore          # Git ignore rules
 ├── next.config.ts      # Next.js configuration
 ├── tailwind.config.ts  # Tailwind CSS configuration
 ├── tsconfig.json       # TypeScript configuration
-└── README.md           # This file
+├── README.md           # This file
+└── ROUTES.md           # Complete routes documentation
 ```
+
+## Routes Documentation
+
+For a complete list of all available routes, endpoints, and authentication requirements, see **[ROUTES.md](./ROUTES.md)**.
+
+### Quick Route Overview
+
+**Public Routes:**
+- `/` - Home page
+- `/services` - Service catalog
+- `/services/[id]` - Service details
+- `/cart` - Shopping cart
+- `/checkout` - Checkout
+- `/login` - Customer login
+- `/register` - Customer registration
+
+**Customer Routes** (Authentication Required):
+- `/profile` - Customer profile
+- `/orders` - Order history
+- `/orders/[orderNumber]` - Order details
+- `/measurements/manual` - Manual measurement entry
+- `/measurements/profiles` - Measurement profiles
+- `/measurements/upload` - Upload measurements
+
+**Admin Routes** (Admin Authentication Required):
+- `/admin/login` - Admin login
+- `/admin/orders` - Orders management
+- `/admin/orders/[orderNumber]` - Order details and management
 
 ## Integration with Backend
 
