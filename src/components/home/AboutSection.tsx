@@ -73,12 +73,12 @@ export const AboutSection: React.FC = () => {
           <div className="relative">
             <div className="w-full h-96 rounded-lg bg-gradient-to-br from-[var(--color-kk-navy)] to-[var(--color-kk-olive)] flex items-center justify-center">
               <div className="text-center text-white p-8">
-                <div className="w-32 h-32 relative mx-auto mb-6">
+                <div className="w-32 h-32 relative mx-auto mb-6 bg-white rounded-full p-2">
                   <Image
                     src="/logo.jpeg"
                     alt="King Kart Logo"
                     fill
-                    className="object-contain"
+                    className="object-contain rounded-full"
                   />
                 </div>
                 <p className="text-2xl font-bold">KING KART</p>

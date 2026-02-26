@@ -23,23 +23,23 @@ export const Footer: React.FC = () => {
             <h3 className="text-[var(--color-kk-gold)] font-bold text-lg mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="#" className="text-sm text-gray-300 hover:text-[var(--color-kk-gold)] transition-colors">
-                  About Us
+                <Link href="/services" className="text-sm text-gray-300 hover:text-[var(--color-kk-gold)] transition-colors">
+                  Services
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-sm text-gray-300 hover:text-[var(--color-kk-gold)] transition-colors">
-                  Contact
+                <Link href="/faq" className="text-sm text-gray-300 hover:text-[var(--color-kk-gold)] transition-colors">
+                  FAQ
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-sm text-gray-300 hover:text-[var(--color-kk-gold)] transition-colors">
-                  Terms & Conditions
+                <Link href="/contact" className="text-sm text-gray-300 hover:text-[var(--color-kk-gold)] transition-colors">
+                  Contact Us
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-sm text-gray-300 hover:text-[var(--color-kk-gold)] transition-colors">
-                  Privacy Policy
+                <Link href="/orders" className="text-sm text-gray-300 hover:text-[var(--color-kk-gold)] transition-colors">
+                  My Orders
                 </Link>
               </li>
             </ul>

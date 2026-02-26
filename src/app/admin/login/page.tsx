@@ -49,8 +49,8 @@ function AdminLoginForm() {
       <div className="max-w-md w-full">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 relative mx-auto mb-4">
-            <Image src="/logo.jpeg" alt="King Kart" fill className="object-contain" />
+          <div className="w-16 h-16 relative mx-auto mb-4 bg-white rounded-full p-1 shadow-md">
+            <Image src="/logo.jpeg" alt="King Kart" fill className="object-contain rounded-full" />
           </div>
           <h1 className="text-3xl font-bold text-[var(--color-kk-navy)]">Admin Login</h1>
           <p className="text-gray-600 mt-1">King Kart Admin Panel</p>
