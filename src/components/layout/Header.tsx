@@ -50,12 +50,12 @@ export const Header: React.FC = () => {
         <div className="flex items-center justify-between py-3">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <div className="w-12 h-12 relative">
+            <div className="w-12 h-12 relative bg-white rounded-full p-0.5">
               <Image
                 src="/logo.jpeg"
                 alt="King Kart Logo"
                 fill
-                className="object-contain"
+                className="object-contain rounded-full"
                 priority
               />
             </div>
